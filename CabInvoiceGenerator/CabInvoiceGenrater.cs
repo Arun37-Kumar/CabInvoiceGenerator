@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace CabInvoiceGenerator
 {
-    public class CabInvoiceGenerater
+    public class CabInvoiceGenrater
     {
         public readonly int MINIMUM_FARE;
         public readonly int COST_PER_KM;
         public readonly int COST_PER_MINUTE;
 
-        public CabInvoiceGenerater(RideType rideType)
+        public CabInvoiceGenrater(RideType rideType)
         {
             if (rideType.Equals(RideType.NORMAL_RIDE))
             {
@@ -41,6 +41,18 @@ namespace CabInvoiceGenerator
             {
                 throw ex;
             }
+        }
+
+        // UC2 - Method to calculate aggregate fare for multiple rides
+        public double CalculateMultipleRides(Ride[] rides)
+        {
+            double totalFare = 0;
+            if (rides.Length == 0)
+                throw new CabInvoiceException(CabInvoiceException.ExceptionType.NULL_RIDES, "No Rides Found");
+            foreach (var ride in rides)
+                totalFare += CalculateFare(ride.time, ride.distance);
+            double aggregateFare = Math.Max(totalFare, MINIMUM_FARE);
+            return aggregateFare;
         }
 
     }
